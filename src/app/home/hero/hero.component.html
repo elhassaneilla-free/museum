@@ -1,0 +1,58 @@
+<div
+  class="relative min-h-screen w-full bg-black flex flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8 pt-20"
+>
+  <!-- Video Background -->
+  <div class="absolute inset-0 z-0">
+    <video
+      autoplay
+      [muted]="true"
+      loop
+      playsinline
+      class="w-full h-full object-cover opacity-60"
+    >
+      <source src="/assets/herov.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- Background Ambience Overlay -->
+  <div
+    class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-black/20 via-black/60 to-black pointer-events-none z-0"
+  ></div>
+
+  <!-- 3D Background -->
+  <canvas #threeCanvas class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+  <div class="relative z-10 text-center max-w-6xl mx-auto space-y-12">
+    <!-- Main Headline -->
+    <h1
+      #headline
+      class="font-['Playfair_Display'] text-4xl sm:text-6xl lg:text-8xl leading-tight tracking-tight text-neutral-100 opacity-0"
+    >
+      Where Timeless Art Meets <br class="hidden md:block" />
+      <span class="italic text-[#c6a664]">Eternal Elegance</span>
+    </h1>
+
+    <!-- Subheadline -->
+    <p
+      #subheadline
+      class="font-['Inter'] text-lg sm:text-xl text-neutral-400 font-light tracking-wide max-w-2xl mx-auto opacity-0"
+    >
+      A curated journey through history’s most treasured masterpieces.
+    </p>
+
+    <!-- CTA Button -->
+    <div #cta class="opacity-0">
+      <button
+        class="relative inline-flex items-center justify-center px-12 py-5 overflow-hidden font-['Inter'] font-medium tracking-[0.2em] text-[#c6a664] transition duration-700 ease-out border border-[#c6a664] group hover:bg-[#c6a664] focus:outline-none cursor-pointer"
+      >
+        <span
+          class="absolute inset-0 w-full h-full bg-[#c6a664] opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out"
+        ></span>
+        <span
+          class="relative z-10 transition-colors duration-700 group-hover:text-black text-xs sm:text-sm uppercase"
+          >Enter the Gallery</span
+        >
+      </button>
+    </div>
+  </div>
+</div>

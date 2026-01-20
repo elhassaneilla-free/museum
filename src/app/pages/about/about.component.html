@@ -1,0 +1,48 @@
+<div class="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+  <!-- Background Image with Cover and Center -->
+  <div class="absolute inset-0 z-0 select-none">
+    <img src="/assets/about.png" alt="VICTORIA Background" class="w-full h-full object-cover object-center" />
+  </div>
+
+  <!-- Dark Overlay (Black with optimized opacity for readability and atmosphere) -->
+  <div class="absolute inset-0 bg-black/60 z-10 pointer-events-none"></div>
+
+  <!-- Content Container -->
+  <div class="relative z-20 max-w-3xl mx-auto px-8 py-24 text-center text-neutral-100 flex flex-col items-center">
+    
+    <!-- Title -->
+    <h1 class="font-['Playfair_Display'] text-4xl sm:text-5xl md:text-6xl text-[#c6a664] mb-12 tracking-wide leading-tight drop-shadow-lg">
+      A Digital Sanctuary for Timeless Art
+    </h1>
+
+    <!-- Manifesto Text -->
+    <div class="space-y-8 font-serif text-lg sm:text-xl leading-relaxed text-neutral-200 tracking-wide font-light opacity-90">
+      <p>
+        VICTORIA is more than a marketplace — it is a curated digital institution devoted to the preservation, appreciation, and transmission of artistic heritage.
+        Inspired by the golden ages of creativity, poetry, and craftsmanship, our platform brings together masterworks that have shaped centuries of human expression.
+      </p>
+      
+      <p>
+        Each piece presented is not merely a product, but a fragment of history — carrying the emotions, philosophies, and aesthetics of generations past.
+      </p>
+      
+      <p>
+        By merging nostalgic artistry with modern digital elegance, VICTORIA creates a refined space where timeless beauty meets contemporary experience, allowing art to be discovered, admired, and acquired with the reverence it deserves.
+      </p>
+    </div>
+
+    <!-- CTA Button -->
+    <div class="mt-16">
+      <button 
+        type="button"
+        class="relative inline-flex items-center justify-center px-14 py-5 overflow-hidden font-['Inter'] font-medium tracking-[0.25em] text-[#c6a664] transition-all duration-500 ease-out border border-[#c6a664] group hover:bg-[#c6a664] hover:shadow-[0_0_30px_rgba(198,166,100,0.3)] focus:outline-none cursor-default"
+      >
+        <span class="absolute inset-0 w-full h-full bg-[#c6a664] opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></span>
+        <span class="relative z-10 transition-colors duration-500 group-hover:text-black text-xs sm:text-sm uppercase">
+          View the Gallery
+        </span>
+      </button>
+    </div>
+
+  </div>
+</div>

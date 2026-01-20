@@ -1,16 +1,16 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent],
   template: `
-    <h1>Welcome to {{ title() }}!</h1>
-
+    <app-navbar></app-navbar>
     <router-outlet />
+    <app-footer></app-footer>
   `,
   styles: [],
 })
-export class App {
-  protected readonly title = signal('museum');
-}
+export class App {}

@@ -18,7 +18,7 @@
     <li>
       <a
         routerLink="/"
-        class="cursor-pointer font-['Inter'] text-[#c6a664] text-sm uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70"
+        class="cursor-pointer font-['Inter'] text-gold text-sm uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70"
       >
         Home
       </a>
@@ -26,7 +26,7 @@
     <li>
       <a
         routerLink="/about"
-        class="cursor-pointer font-['Inter'] text-[#c6a664] text-sm uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70"
+        class="cursor-pointer font-['Inter'] text-gold text-sm uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70"
       >
         About
       </a>
@@ -34,10 +34,110 @@
     <li>
       <a
         routerLink="/gallery"
-        class="cursor-pointer font-['Inter'] text-[#c6a664] text-sm uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70"
+        class="cursor-pointer font-['Inter'] text-gold text-sm uppercase tracking-[0.2em] transition-opacity duration-300 hover:opacity-70"
       >
         Gallery
       </a>
     </li>
   </ul>
+
+  <!-- Login / Logout Icon -->
+  <button 
+    (click)="authService.isAuthenticated() ? onLogout() : toggleLogin()"
+    class="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 group p-2 flex items-center space-x-3 text-gold/60 hover:text-gold transition-all duration-500 cursor-pointer"
+  >
+    <div class="w-10 h-10 flex items-center justify-center border border-gold/10 rounded-full group-hover:border-gold/30 transition-all duration-500">
+      <svg *ngIf="!authService.isAuthenticated()" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20.5901 22C20.5901 18.13 16.7401 15 12.0001 15C7.2601 15 3.4101 18.13 3.4101 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <svg *ngIf="authService.isAuthenticated()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="hidden md:block font-['Inter'] text-[10px] uppercase tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-opacity">
+      {{ authService.isAuthenticated() ? authService.currentUser()?.username : 'Access' }}
+    </span>
+  </button>
 </nav>
+
+<!-- Login Modal Overlay -->
+<div 
+  *ngIf="isLoginOpen"
+  class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
+>
+  <!-- Transparent Backdrop -->
+  <div (click)="toggleLogin()" class="absolute inset-0 bg-black/10 transition-all duration-500"></div>
+
+  <!-- Obscured Modal Content -->
+  <div class="relative w-full max-w-[450px] bg-black/60 backdrop-blur-2xl border border-gold/30 p-10 md:p-14 shadow-[0_20px_100px_rgba(0,0,0,0.8)] overflow-hidden animate-in fade-in zoom-in duration-500">
+    
+    <!-- Premium Decorative Accents -->
+    <div class="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-gold/40"></div>
+    <div class="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-gold/40"></div>
+    <div class="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-gold/40"></div>
+    <div class="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-gold/40"></div>
+
+    <!-- Inner Frame Detail -->
+    <div class="absolute inset-4 border border-gold/5 pointer-events-none"></div>
+
+    <!-- Close Button -->
+    <button (click)="toggleLogin()" class="absolute top-8 right-8 text-gold/30 hover:text-gold transition-all duration-300 z-20">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <!-- Modal Header -->
+    <div class="relative z-10 text-center mb-14">
+      <h2 class="font-serif text-3xl md:text-4xl text-gold tracking-[0.3em] uppercase mb-4 font-light drop-shadow-md">
+        Identity
+      </h2>
+      <div class="w-16 h-px bg-gold/40 mx-auto mb-6"></div>
+      <p class="font-sans text-[9px] text-neutral-500 uppercase tracking-[0.6em] opacity-80 italic">The Vault Access</p>
+    </div>
+
+    <!-- Form -->
+    <form (submit)="onLogin()" class="relative z-10 space-y-10">
+      <div class="relative group/field">
+        <label class="block font-sans text-[8px] uppercase tracking-[0.4em] text-gold/40 mb-2 group-focus-within/field:text-gold transition-colors">Access Key</label>
+        <input 
+          type="text" 
+          name="username"
+          [(ngModel)]="username"
+          placeholder="Username" 
+          class="w-full bg-transparent border-b border-gold/10 py-3 font-sans text-sm text-neutral-100 placeholder:text-neutral-700 focus:outline-none focus:border-gold/50 transition-all duration-500"
+        >
+        <div class="absolute bottom-0 left-0 h-px bg-gold/60 w-0 group-focus-within/field:w-full transition-all duration-1000"></div>
+      </div>
+      
+      <div class="relative group/field">
+        <label class="block font-sans text-[8px] uppercase tracking-[0.4em] text-gold/40 mb-2 group-focus-within/field:text-gold transition-colors">Security Code</label>
+        <input 
+          type="password" 
+          name="password"
+          [(ngModel)]="password"
+          placeholder="••••••••" 
+          class="w-full bg-transparent border-b border-gold/10 py-3 font-sans text-sm text-neutral-100 placeholder:text-neutral-700 focus:outline-none focus:border-gold/50 transition-all duration-500"
+        >
+        <div class="absolute bottom-0 left-0 h-px bg-gold/60 w-0 group-focus-within/field:w-full transition-all duration-1000"></div>
+      </div>
+
+      <div *ngIf="error" class="text-red-500/80 text-[10px] uppercase tracking-widest text-center animate-pulse">
+        {{ error }}
+      </div>
+
+      <button 
+        type="submit"
+        class="w-full py-5 border border-gold/20 font-sans text-[10px] text-gold uppercase tracking-[0.6em] transition-all duration-700 hover:bg-gold hover:text-black hover:tracking-[0.8em] overflow-hidden relative group/btn"
+      >
+        <span class="relative z-10 transition-colors">Authenticate</span>
+        <div class="absolute inset-0 bg-gold translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"></div>
+      </button>
+
+      <div class="text-center pt-2">
+        <span class="font-sans text-[9px] text-neutral-700 uppercase tracking-widest cursor-default">Restricted Area</span>
+      </div>
+    </form>
+  </div>
+</div>

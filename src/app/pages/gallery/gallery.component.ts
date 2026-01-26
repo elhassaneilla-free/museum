@@ -22,6 +22,7 @@ export class GalleryComponent {
     { name: 'Vincent van Gogh', image: 'assets/van0.png', route: '/artist/van-gogh' },
     { name: 'Johannes Vermeer', image: 'assets/joh0.png', route: '/artist/vermeer' },
     { name: 'Claude Monet', image: 'assets/clau0.png', route: '/artist/monet' },
-    { name: 'Edward Hopper', image: 'assets/edwa0.png', route: '/artist/hopper' }
+    { name: 'Edward Hopper', image: 'assets/edwa0.png', route: '/artist/hopper' },
+    { name: 'Luxury Frames Collection', image: 'assets/frame0.png', route: '/frames' }
   ];
 }

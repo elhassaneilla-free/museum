@@ -7,4 +7,10 @@
   --color-gold: #c6a664;
   --font-serif: 'Playfair Display', serif;
   --font-sans: 'Inter', sans-serif;
+  --animate-shimmer: shimmer 2s infinite;
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
 }

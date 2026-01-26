@@ -9,8 +9,9 @@
 
   <!-- Artist Grid (2 x 3 on medium and above) -->
   <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-    <div *ngFor="let artist of artists" 
+    <div *ngFor="let artist of artists; let i = index" 
          [routerLink]="artist.route"
+         [class.lg:col-start-2]="i === 6"
          class="group relative h-[500px] overflow-hidden cursor-pointer border border-[#c6a664]/10 bg-neutral-900/50 backdrop-blur-sm">
       
       <!-- Artist Image Background -->

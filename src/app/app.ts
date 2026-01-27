@@ -2,17 +2,19 @@ import { Component } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { NotificationComponent } from './components/notification/notification.component';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent, CommonModule],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, NotificationComponent, CommonModule],
   template: `
     <app-navbar *ngIf="!isAdminRoute"></app-navbar>
     <router-outlet />
     <app-footer *ngIf="!isAdminRoute"></app-footer>
+    <app-notification></app-notification>
   `,
   styles: [],
 })

@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { CartService } from '../../services/cart.service';
+import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
+import { ProductModalComponent } from '../../components/product-modal/product-modal.component';
 
 interface FrameProduct {
   name: string;
@@ -13,7 +17,7 @@ interface FrameProduct {
 @Component({
   selector: 'app-frames',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ProductModalComponent],
   templateUrl: './frames.component.html',
   styles: []
 })
@@ -41,4 +45,34 @@ export class FramesComponent {
       layout: 'portrait'
     }
   ];
+
+  isModalOpen = false;
+  selectedFrame: FrameProduct | null = null;
+
+  constructor(
+    public cartService: CartService,
+    public authService: AuthService,
+    private notificationService: NotificationService
+  ) {}
+
+  handleProductClick(frame: FrameProduct) {
+    this.selectedFrame = frame;
+    this.isModalOpen = true;
+  }
+
+  addToCart(frame: FrameProduct, event: Event) {
+    event.stopPropagation();
+    
+    if (!this.authService.isAuthenticated()) return;
+
+    this.cartService.addToCart({
+      name: frame.name,
+      artist: 'Luxury Collection',
+      variant: 'Museum Edition',
+      price: frame.price,
+      image: frame.image
+    });
+
+    this.notificationService.show(frame.name, 'Luxury Collection');
+  }
 }

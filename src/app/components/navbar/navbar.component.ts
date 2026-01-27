@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { gsap } from 'gsap';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -20,7 +21,7 @@ export class NavbarComponent implements AfterViewInit {
   password = '';
   error = '';
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, public cartService: CartService) {}
 
   toggleLogin() {
     this.isLoginOpen = !this.isLoginOpen;

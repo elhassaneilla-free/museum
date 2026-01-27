@@ -4,6 +4,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
 import { ArtistPageComponent } from './pages/artist-page/artist-page.component';
 import { FramesComponent } from './pages/frames/frames.component';
+import { CartComponent } from './pages/cart/cart.component';
 import { AdminLayoutComponent } from './admin/layout/admin-layout.component';
 import { AdminLoginComponent } from './admin/login/admin-login.component';
 import { AdminDashboardComponent } from './admin/dashboard/admin-dashboard.component';
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'gallery', component: GalleryComponent },
   { path: 'artist/:id', component: ArtistPageComponent },
   { path: 'frames', component: FramesComponent },
+  { path: 'cart', component: CartComponent },
   
   // Admin Routes
   { path: 'admin/login', component: AdminLoginComponent },

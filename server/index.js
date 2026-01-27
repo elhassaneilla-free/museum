@@ -10,7 +10,6 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // PostgreSQL Connection
-// Note: In a real environment, use environment variables for credentials
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
@@ -19,55 +18,74 @@ const pool = new Pool({
   port: 5432,
 });
 
-// For Academic Use: Fallback mockup data if DB connection fails or is not setup
+// For Academic Use: Mock users
 const MOCK_USERS = [
-  { id: 1, username: 'user', password: 'qwerty', role: 'user' },
-  { id: 2, username: 'admin', password: 'azerty', role: 'admin' }
+  { id: 1, username: 'user', password: 'user123', role: 'user' },
+  { id: 2, username: 'admin', password: 'admin123', role: 'admin' },
+  { id: 3, username: 'Victoria', password: 'victoria123', role: 'user' }
 ];
+
+console.log('--- RESTORING AUTHENTICATION SYSTEM ---');
+console.log('Authorized Mock Users:');
+MOCK_USERS.forEach(u => console.log(` - ${u.username} [${u.role}]`));
 
 // Login Endpoint
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log(`Login attempt for: [${username}] with password: [${password}]`);
+  
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required' });
+  }
 
-  // 1. Check Mock Data First (for academic convenience)
-  const mockUser = MOCK_USERS.find(u => u.username === username && u.password === password);
+  const normalizedUsername = username.trim().toLowerCase();
+  const normalizedPassword = password.trim(); // Trim password for ease of use in academic demo
+
+  console.log(`\n[LOGIN ATTEMPT] User: "${normalizedUsername}"`);
+
+  // 1. Check Mock Data
+  const mockUser = MOCK_USERS.find(u => 
+    u.username.toLowerCase() === normalizedUsername && 
+    u.password === normalizedPassword
+  );
+
   if (mockUser) {
-    console.log(`Mock user found: ${mockUser.username} (${mockUser.role})`);
+    console.log(`[SUCCESS] Found internal record for ${mockUser.username}`);
     return res.json({
       username: mockUser.username,
       role: mockUser.role
     });
   }
 
-  // 2. Fallback to real DB if needed
+  // 2. DB Fallback
   try {
     const result = await pool.query(
-      'SELECT * FROM users WHERE username = $1 AND password = $2',
-      [username, password]
+      'SELECT * FROM users WHERE LOWER(username) = $1 AND password = $2',
+      [normalizedUsername, normalizedPassword]
     );
 
     if (result.rows.length > 0) {
       const user = result.rows[0];
-      console.log(`DB user found: ${user.username} (${user.role})`);
+      console.log(`[SUCCESS] Found database record for ${user.username}`);
       return res.json({
         username: user.username,
         role: user.role
       });
     }
   } catch (err) {
-    console.error('DB Error:', err.message);
+    console.warn(`[DB WARNING] Database query failed: ${err.message}. Proceeding with internal check only.`);
   }
 
-  console.log('Login failed: Invalid credentials');
+  console.log(`[FAILED] No match found for "${normalizedUsername}"`);
   return res.status(401).json({ message: 'Invalid credentials' });
 });
 
-// Simple health check
+// Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'operational' });
+  res.json({ status: 'operational', timestamp: new Date().toISOString() });
 });
 
-app.listen(port, '127.0.0.1', () => {
-  console.log(`Victoria API listening at http://127.0.0.1:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`\nVICTORIA API actively monitoring port ${port}`);
+  console.log(`Local Access: http://127.0.0.1:${port}`);
+  console.log(`Network Access: http://localhost:${port}`);
 });

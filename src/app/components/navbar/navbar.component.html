@@ -41,24 +41,49 @@
     </li>
   </ul>
 
-  <!-- Login / Logout Icon -->
-  <button 
-    (click)="authService.isAuthenticated() ? onLogout() : toggleLogin()"
-    class="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 group p-2 flex items-center space-x-3 text-gold/60 hover:text-gold transition-all duration-500 cursor-pointer"
-  >
-    <div class="w-10 h-10 flex items-center justify-center border border-gold/10 rounded-full group-hover:border-gold/30 transition-all duration-500">
-      <svg *ngIf="!authService.isAuthenticated()" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M20.5901 22C20.5901 18.13 16.7401 15 12.0001 15C7.2601 15 3.4101 18.13 3.4101 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <svg *ngIf="authService.isAuthenticated()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <span class="hidden md:block font-['Inter'] text-[10px] uppercase tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-opacity">
-      {{ authService.isAuthenticated() ? authService.currentUser()?.username : 'Access' }}
-    </span>
-  </button>
+  <!-- Cart & Login / Logout -->
+  <div class="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 flex items-center space-x-6 md:space-x-8">
+    <!-- Cart Icon -->
+    <a 
+      *ngIf="authService.isAuthenticated()"
+      routerLink="/cart"
+      class="group relative p-2 flex items-center justify-center transition-all duration-500"
+    >
+      <div class="w-10 h-10 flex items-center justify-center border border-gold/40 rounded-full bg-black/40 group-hover:bg-gold/10 group-hover:border-gold group-hover:shadow-[0_0_15px_rgba(198,166,100,0.3)] transition-all duration-500">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold">
+          <path d="M9 20C9 21.1046 8.10457 22 7 22C5.89543 22 5 21.1046 5 20C5 18.8954 5.89543 18 7 18C8.10457 18 9 18.8954 9 20Z" />
+          <path d="M20 20C20 21.1046 19.1046 22 18 22C16.8954 22 16 21.1046 16 20C16 18.8954 16.8954 18 18 18C19.1046 18 20 18.8954 20 20Z" />
+          <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <!-- Cart Badge -->
+      <div 
+        *ngIf="cartService.getTotalCount() > 0"
+        class="absolute -top-1 -right-1 w-5 h-5 bg-gold rounded-full flex items-center justify-center text-[10px] text-black font-bold shadow-[0_0_10px_rgba(198,166,100,0.5)] animate-in fade-in zoom-in duration-300"
+      >
+        {{ cartService.getTotalCount() }}
+      </div>
+    </a>
+
+    <!-- Login / Logout Icon -->
+    <button 
+      (click)="authService.isAuthenticated() ? onLogout() : toggleLogin()"
+      class="group p-2 flex items-center space-x-3 text-gold/60 hover:text-gold transition-all duration-500 cursor-pointer"
+    >
+      <div class="w-10 h-10 flex items-center justify-center border border-gold/10 rounded-full group-hover:border-gold/30 transition-all duration-500">
+        <svg *ngIf="!authService.isAuthenticated()" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20.5901 22C20.5901 18.13 16.7401 15 12.0001 15C7.2601 15 3.4101 18.13 3.4101 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg *ngIf="authService.isAuthenticated()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="hidden md:block font-['Inter'] text-[10px] uppercase tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-opacity">
+        {{ authService.isAuthenticated() ? authService.currentUser()?.username : 'Access' }}
+      </span>
+    </button>
+  </div>
 </nav>
 
 <!-- Login Modal Overlay -->

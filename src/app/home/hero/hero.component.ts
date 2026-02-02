@@ -16,6 +16,7 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
   @ViewChild('headline') headline!: ElementRef;
   @ViewChild('subheadline') subheadline!: ElementRef;
   @ViewChild('cta') cta!: ElementRef;
+  @ViewChild('prefatory') prefatory!: ElementRef;
   @ViewChild('threeCanvas') threeCanvas!: ElementRef<HTMLCanvasElement>;
 
   private renderer!: THREE.WebGLRenderer;
@@ -259,13 +260,19 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
         this.subheadline.nativeElement,
         { opacity: 0, y: 30 },
         { duration: 2.0, opacity: 1, y: 0 },
-        '-=1.5' // Overlap
+        '-=1.5'
+      )
+      .fromTo(
+        this.prefatory.nativeElement,
+        { opacity: 0, scale: 0.9 },
+        { duration: 1.5, opacity: 1, scale: 1 },
+        '-=1.0'
       )
       .fromTo(
         this.cta.nativeElement,
         { opacity: 0, y: 20 },
         { duration: 1.5, opacity: 1, y: 0 },
-        '-=1.5'
+        '-=1.0'
       );
   }
 }

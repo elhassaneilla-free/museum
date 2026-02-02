@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { CartService, CartItem } from '../../services/cart.service';
+import { DataService } from '../../services/data.service';
+import { AuthService } from '../../services/auth.service';
 import { animate, style, transition, trigger, query, stagger } from '@angular/animations';
 
 @Component({
@@ -26,7 +28,14 @@ import { animate, style, transition, trigger, query, stagger } from '@angular/an
   ]
 })
 export class CartComponent {
-  constructor(public cartService: CartService) {}
+  isProcessing = false;
+
+  constructor(
+    public cartService: CartService,
+    private dataService: DataService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   removeItem(id: string) {
     this.cartService.removeFromCart(id);
@@ -34,5 +43,27 @@ export class CartComponent {
 
   getFormattedTotal(): string {
     return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(this.cartService.getTotalPrice());
+  }
+
+  onCheckout() {
+    if (!this.authService.isAuthenticated()) return;
+    
+    this.isProcessing = true;
+    const orderData = {
+      items: this.cartService.cartItems(),
+      total: this.cartService.getTotalPrice()
+    };
+
+    this.dataService.createOrder(orderData).subscribe({
+      next: () => {
+        this.cartService.clearCart();
+        alert('Acquisition request submitted successfully. Our curator will contact you shortly.');
+        this.router.navigate(['/']);
+      },
+      error: () => {
+        alert('Failed to process acquisition. Please try again.');
+        this.isProcessing = false;
+      }
+    });
   }
 }

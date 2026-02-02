@@ -1,13 +1,17 @@
-import { Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, signal, effect } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { tap, catchError } from 'rxjs/operators';
+
+import { CartService } from './cart.service';
 
 export type UserRole = 'user' | 'admin' | null;
 
-interface LoginResponse {
-  role: UserRole;
+export interface AuthState {
   username: string;
+  role: UserRole;
+  token: string;
+  isAuthenticated: boolean;
 }
 
 @Injectable({
@@ -15,44 +19,70 @@ interface LoginResponse {
 })
 export class AuthService {
   private apiUrl = 'http://127.0.0.1:3000/api';
-  currentUser = signal<LoginResponse | null>(this.getStoredUser());
+  private state = signal<AuthState | null>(this.loadFromStorage());
 
-  constructor(private http: HttpClient, private router: Router) {}
+  currentUser = this.state.asReadonly();
 
-  private getStoredUser(): LoginResponse | null {
-    const user = localStorage.getItem('victoria_user');
-    return user ? JSON.parse(user) : null;
+  constructor(
+    private router: Router, 
+    private cartService: CartService,
+    private http: HttpClient
+  ) {
+    effect(() => {
+      const currentState = this.state();
+      if (currentState) {
+        localStorage.setItem('victoria_auth', JSON.stringify(currentState));
+      } else {
+        localStorage.removeItem('victoria_auth');
+      }
+    });
   }
 
-  login(username: string, password: string, isAdmin: boolean = false) {
-    console.log(`Attempting login for ${username} at ${this.apiUrl}/login`);
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { username, password }).pipe(
-      tap({
-        next: (response) => console.log('Login successful:', response),
-        error: (err) => console.error('Login failed:', err)
-      }),
-      tap(response => {
-        localStorage.setItem('victoria_user', JSON.stringify(response));
-        this.currentUser.set(response);
+  private loadFromStorage(): AuthState | null {
+    const saved = localStorage.getItem('victoria_auth');
+    try {
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  login(username: string, password: string) {
+    return this.http.post<{ token: string; username: string; role: UserRole }>(`${this.apiUrl}/login`, { username, password }).pipe(
+      tap(res => {
+        const newState: AuthState = {
+          username: res.username,
+          role: res.role,
+          token: res.token,
+          isAuthenticated: true
+        };
+        this.state.set(newState);
       })
     );
   }
 
   logout() {
-    localStorage.removeItem('victoria_user');
-    this.currentUser.set(null);
+    this.state.set(null);
+    this.cartService.clearCart();
     this.router.navigate(['/']);
   }
 
+  getToken(): string | null {
+    return this.state()?.token || null;
+  }
+
   isAdmin(): boolean {
-    return this.currentUser()?.role === 'admin';
+    const state = this.state();
+    return !!state && state.isAuthenticated && state.role === 'admin';
   }
 
   isUser(): boolean {
-    return this.currentUser()?.role === 'user';
+    const state = this.state();
+    return !!state && state.isAuthenticated && state.role === 'user';
   }
 
   isAuthenticated(): boolean {
-    return !!this.currentUser();
+    const state = this.state();
+    return !!state && state.isAuthenticated;
   }
 }

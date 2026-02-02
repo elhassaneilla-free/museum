@@ -1,18 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { ProductModalComponent } from '../../components/product-modal/product-modal.component';
-
-interface FrameProduct {
-  name: string;
-  image: string;
-  description: string;
-  price: string;
-  layout: 'portrait' | 'landscape';
-}
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-frames',
@@ -21,58 +14,42 @@ interface FrameProduct {
   templateUrl: './frames.component.html',
   styles: []
 })
-export class FramesComponent {
-  frames: FrameProduct[] = [
-    {
-      name: 'Bronze Classic Frame',
-      image: 'assets/frame1.png',
-      description: 'A timeless bronze frame inspired by classical European museums, offering warmth and historical elegance.',
-      price: '€450',
-      layout: 'portrait'
-    },
-    {
-      name: 'Silver Heritage Frame',
-      image: 'assets/frame2.png',
-      description: 'A refined silver frame with subtle reflections, perfect for modern and impressionist masterpieces.',
-      price: '€750',
-      layout: 'portrait'
-    },
-    {
-      name: 'Imperial Gold Frame',
-      image: 'assets/frame3.png',
-      description: 'An opulent gold frame crafted to elevate masterpieces, inspired by royal and museum collections.',
-      price: '€1,200',
-      layout: 'portrait'
-    }
-  ];
-
+export class FramesComponent implements OnInit {
+  frames: any[] = [];
   isModalOpen = false;
-  selectedFrame: FrameProduct | null = null;
+  selectedFrame: any | null = null;
 
   constructor(
     public cartService: CartService,
     public authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dataService: DataService
   ) {}
 
-  handleProductClick(frame: FrameProduct) {
+  ngOnInit() {
+    this.dataService.getPaintings().subscribe(data => {
+      this.frames = data.filter(p => p.category === 'Frames');
+    });
+  }
+
+  handleProductClick(frame: any) {
     this.selectedFrame = frame;
     this.isModalOpen = true;
   }
 
-  addToCart(frame: FrameProduct, event: Event) {
+  addToCart(frame: any, event: Event) {
     event.stopPropagation();
     
     if (!this.authService.isAuthenticated()) return;
 
     this.cartService.addToCart({
-      name: frame.name,
-      artist: 'Luxury Collection',
+      name: frame.title,
+      artist: frame.artist,
       variant: 'Museum Edition',
       price: frame.price,
       image: frame.image
     });
 
-    this.notificationService.show(frame.name, 'Luxury Collection');
+    this.notificationService.show(frame.title, frame.artist);
   }
 }

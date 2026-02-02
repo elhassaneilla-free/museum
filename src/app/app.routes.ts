@@ -27,7 +27,10 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: AdminDashboardComponent }
+      { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'paintings', loadComponent: () => import('./admin/paintings/admin-paintings.component').then(m => m.AdminPaintingsComponent) },
+      { path: 'orders', loadComponent: () => import('./admin/orders/admin-orders.component').then(m => m.AdminOrdersComponent) },
+      { path: 'users', loadComponent: () => import('./admin/users/admin-users.component').then(m => m.AdminUsersComponent) }
     ]
   }
 ];

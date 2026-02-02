@@ -21,7 +21,7 @@ import { AuthService } from '../../services/auth.service';
           <p class="font-sans text-[8px] text-neutral-600 uppercase tracking-[0.6em] mt-6">Restricted Vault Access</p>
         </div>
 
-        <form (submit)="onSubmit()" class="space-y-8">
+        <form (ngSubmit)="onSubmit()" class="space-y-8">
           <div class="space-y-2">
             <label class="block font-sans text-[8px] uppercase tracking-[0.4em] text-gold/40">Security Identifier</label>
             <input 
@@ -66,8 +66,8 @@ export class AdminLoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
-    this.authService.login(this.username, this.password, true).subscribe({
-      next: (res) => {
+    this.authService.login(this.username, this.password).subscribe({
+      next: (res: any) => {
         if (res.role === 'admin') {
           this.router.navigate(['/admin/dashboard']);
         } else {
@@ -75,8 +75,8 @@ export class AdminLoginComponent {
           this.authService.logout();
         }
       },
-      error: () => {
-        this.error = 'Invalid Credentials';
+      error: (err: any) => {
+        this.error = err.error?.message || 'Invalid Credentials';
       }
     });
   }

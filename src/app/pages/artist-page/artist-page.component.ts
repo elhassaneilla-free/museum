@@ -5,6 +5,7 @@ import { ProductModalComponent } from '../../components/product-modal/product-mo
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
+import { DataService } from '../../services/data.service';
 
 interface Painting {
   name: string;
@@ -92,23 +93,35 @@ const ARTISTS_DATA: Record<string, ArtistData> = {
 })
 export class ArtistPageComponent implements OnInit {
   artistId: string | null = null;
-  artist: ArtistData | null = null;
+  artist: any | null = null;
+  paintings: any[] = [];
   
   isModalOpen = false;
-  selectedPainting: Painting | null = null;
+  selectedPainting: any | null = null;
 
   constructor(
     private route: ActivatedRoute,
     public cartService: CartService,
     public authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dataService: DataService
   ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.artistId = params.get('id');
-      if (this.artistId && ARTISTS_DATA[this.artistId]) {
-        this.artist = ARTISTS_DATA[this.artistId];
+      if (this.artistId) {
+        // Find artist metadata for layout
+        const meta = ARTISTS_DATA[this.artistId];
+        this.artist = meta || { name: this.artistId, layout: 'portrait' };
+        
+        // Fetch paintings from API for this artist
+        this.dataService.getPaintings().subscribe((allPaintings: any[]) => {
+          this.paintings = allPaintings.filter((p: any) => 
+            p.artist.toLowerCase().includes(this.artist.name.toLowerCase()) ||
+            this.artist.name.toLowerCase().includes(p.artist.toLowerCase())
+          );
+        });
       }
     });
   }

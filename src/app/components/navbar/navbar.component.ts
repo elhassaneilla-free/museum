@@ -21,6 +21,14 @@ export class NavbarComponent implements AfterViewInit {
   password = '';
   error = '';
 
+  // Register Fields (Design Only)
+  regFullname = '';
+  regEmail = '';
+  regUsername = '';
+  regPassword = '';
+  regConfirmPassword = '';
+  isRegistering = false; // Design state
+
   constructor(public authService: AuthService, public cartService: CartService) {}
 
   toggleLogin() {

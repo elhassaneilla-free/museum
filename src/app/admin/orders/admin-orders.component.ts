@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService, Order } from '../../services/data.service';
 
@@ -8,22 +8,30 @@ import { DataService, Order } from '../../services/data.service';
   imports: [CommonModule],
   template: `
     <div class="space-y-12 animate-in fade-in duration-700">
-      <header>
-        <h2 class="font-serif text-4xl text-gold tracking-wide italic">Acquisition History</h2>
-        <p class="font-sans text-[10px] text-neutral-500 uppercase tracking-[0.4em] mt-2">Transaction Ledger • Victoria Institution</p>
+      <header class="flex justify-between items-end">
+        <div>
+          <h2 class="font-serif text-4xl text-[#c6a664] tracking-wide italic drop-shadow-md">Acquisition History</h2>
+          <p class="font-sans text-[11px] text-neutral-400 uppercase tracking-[0.4em] mt-2 font-medium">Transaction Ledger • Victoria Institution</p>
+        </div>
+        <button 
+          (click)="clearVerifiedOrders()"
+          class="px-8 py-3 border border-[#c6a664]/20 text-[#c6a664] text-[10px] uppercase tracking-[0.3em] hover:bg-[#c6a664] hover:text-black transition-all duration-500 font-bold"
+        >
+          Archive Verified Records
+        </button>
       </header>
 
       <!-- Orders List -->
       <div class="grid grid-cols-1 gap-6">
-        <div *ngFor="let order of orders" class="border border-gold/10 bg-black/40 backdrop-blur-sm p-8 group">
+        <div *ngFor="let order of orders()" class="border border-[#c6a664]/10 bg-black/40 backdrop-blur-sm p-8 group transition-colors hover:border-[#c6a664]/30">
           <div class="flex justify-between items-start mb-8">
             <div>
-              <div class="text-gold/40 text-[9px] uppercase tracking-widest mb-1">Transaction ID</div>
-              <div class="font-mono text-xs text-neutral-300">#ORD-{{ 1000 + order.id }}</div>
+              <div class="text-[#c6a664] text-[9px] uppercase tracking-widest mb-1 font-bold">Transaction ID</div>
+              <div class="font-mono text-xs text-neutral-200">#ORD-{{ 1000 + order.id }}</div>
             </div>
             <div class="text-right">
-              <div class="text-gold/40 text-[9px] uppercase tracking-widest mb-1">Date catalogued</div>
-              <div class="text-xs text-neutral-400 font-sans tracking-widest uppercase">{{ order.date | date:'dd.MM.yyyy HH:mm' }}</div>
+              <div class="text-[#c6a664] text-[9px] uppercase tracking-widest mb-1 font-bold">Date catalogued</div>
+              <div class="text-xs text-neutral-300 font-sans tracking-widest uppercase">{{ order.date | date:'dd.MM.yyyy HH:mm' }}</div>
             </div>
           </div>
 
@@ -31,34 +39,34 @@ import { DataService, Order } from '../../services/data.service';
             <!-- Items -->
             <div class="flex-grow space-y-4">
               <div *ngFor="let item of order.items" class="flex items-center space-x-6">
-                <div class="w-12 h-16 bg-neutral-900 overflow-hidden border border-gold/5 flex-shrink-0">
+                <div class="w-12 h-16 bg-neutral-900 overflow-hidden border border-[#c6a664]/5 flex-shrink-0">
                   <img [src]="item.image" class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700">
                 </div>
                 <div>
-                  <div class="font-serif text-sm text-neutral-200 italic">{{ item.productTitle }}</div>
-                  <div class="text-[9px] text-neutral-500 uppercase tracking-widest">{{ item.artist }} • {{ item.variant }}</div>
+                  <div class="font-serif text-sm text-white italic tracking-wide">{{ item.productTitle }}</div>
+                  <div class="text-[9px] text-neutral-400 uppercase tracking-widest">{{ item.artist }} • {{ item.variant }}</div>
                 </div>
               </div>
             </div>
 
             <!-- Summary & Actions -->
             <div class="w-full md:w-64 space-y-6">
-              <div class="border-t border-gold/10 pt-4">
+              <div class="border-t border-[#c6a664]/10 pt-4">
                 <div class="flex justify-between items-center mb-6">
-                  <span class="text-[9px] text-neutral-500 uppercase tracking-widest">Collector</span>
-                  <span class="text-[10px] text-gold uppercase tracking-widest font-bold">{{ order.user }}</span>
+                  <span class="text-[9px] text-neutral-400 uppercase tracking-widest font-bold">Collector</span>
+                  <span class="text-[10px] text-[#c6a664] uppercase tracking-widest font-bold">{{ order.user }}</span>
                 </div>
                 <div class="flex justify-between items-center mb-8">
-                  <span class="text-[9px] text-neutral-500 uppercase tracking-widest">Investment</span>
-                  <span class="text-lg text-gold font-serif italic">€{{ order.total | number }}</span>
+                  <span class="text-[9px] text-neutral-400 uppercase tracking-widest font-bold">Investment</span>
+                  <span class="text-lg text-[#c6a664] font-serif italic drop-shadow-sm">€{{ order.total | number }}</span>
                 </div>
                 
                 <div class="space-y-3">
-                   <div class="text-[8px] text-gold/40 uppercase tracking-widest mb-2">Operational Status</div>
+                   <div class="text-[9px] text-[#c6a664] uppercase tracking-widest mb-2 font-bold">Operational Status</div>
                    <select 
                     [value]="order.status"
                     (change)="updateStatus(order.id, $event)"
-                    class="w-full bg-black/60 border border-gold/20 p-3 text-gold text-[10px] uppercase tracking-[0.2em] focus:outline-none focus:border-gold transition-all"
+                    class="w-full bg-black/60 border border-[#c6a664]/20 p-3 text-[#c6a664] text-[10px] uppercase tracking-[0.2em] focus:outline-none focus:border-[#c6a664] transition-all font-bold"
                    >
                      <option value="pending">Pending Authentication</option>
                      <option value="validated">Verified</option>
@@ -76,24 +84,37 @@ import { DataService, Order } from '../../services/data.service';
   styles: []
 })
 export class AdminOrdersComponent implements OnInit {
-  orders: Order[] = [];
+  private dataService = inject(DataService);
+  orders = computed(() => [...this.dataService.orders()].reverse());
 
-  constructor(private dataService: DataService) {}
+  constructor() {}
 
   ngOnInit() {
-    this.loadOrders();
-  }
-
-  loadOrders() {
-    this.dataService.getOrders().subscribe(data => {
-      this.orders = data.reverse(); // Newest first
-    });
+    this.dataService.getOrders().subscribe();
   }
 
   updateStatus(orderId: number, event: any) {
     const status = event.target.value;
-    this.dataService.updateOrderStatus(orderId, status).subscribe(() => {
-      this.loadOrders();
-    });
+    this.dataService.updateOrderStatus(orderId, status).subscribe();
+  }
+
+  clearVerifiedOrders() {
+    const allOrders = this.orders();
+    
+    if (allOrders.length === 0) {
+      alert('The ledger is already empty.');
+      return;
+    }
+
+    if (confirm(`Clear all acquisition records from the ledger? This will remove ${allOrders.length} transactions.`)) {
+      this.dataService.deleteAllOrders().subscribe({
+        next: () => {
+          alert('Ledger cleared. All records have been archived.');
+        },
+        error: () => {
+          alert('An error occurred while clearing the ledger.');
+        }
+      });
+    }
   }
 }

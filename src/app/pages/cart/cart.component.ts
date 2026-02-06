@@ -29,6 +29,14 @@ import { animate, style, transition, trigger, query, stagger } from '@angular/an
 })
 export class CartComponent {
   isProcessing = false;
+  selectedPayment: string | null = null;
+  paymentMethods = [
+    { id: 'visa', name: 'Visa' },
+    { id: 'mastercard', name: 'MasterCard' },
+    { id: 'amex', name: 'Amex' },
+    { id: 'paypal', name: 'PayPal' },
+    { id: 'payoneer', name: 'Payoneer' }
+  ];
 
   constructor(
     public cartService: CartService,
@@ -42,7 +50,7 @@ export class CartComponent {
   }
 
   getFormattedTotal(): string {
-    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(this.cartService.getTotalPrice());
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.cartService.getTotalPrice());
   }
 
   onCheckout() {

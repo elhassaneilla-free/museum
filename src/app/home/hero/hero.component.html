@@ -2,7 +2,7 @@
   class="relative min-h-screen w-full bg-[#050505] flex flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8 pt-20"
 >
   <!-- Artistic Texture Overlay -->
-  <div class="absolute inset-0 pointer-events-none opacity-[0.04] mix-blend-overlay z-20 grayscale brightness-125" 
+  <div class="absolute inset-0 pointer-events-none opacity-[0.05] mix-blend-overlay z-20 grayscale brightness-125" 
        style="background-image: url('https://grainy-gradients.vercel.app/noise.svg');"></div>
 
   <!-- Video Background with Mask -->
@@ -16,36 +16,36 @@
     >
       <source src="/assets/herov.mp4" type="video/mp4" />
     </video>
-    <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-transparent to-[#050505]"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/90 via-black/40 to-[#050505]"></div>
   </div>
 
   <!-- 3D Background Objects -->
   <canvas #threeCanvas class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
 
   <!-- Decorative Corner Accents -->
-  <div class="absolute top-32 left-12 w-16 h-16 border-t border-l border-[#c6a664]/20 hidden xl:block z-30"></div>
-  <div class="absolute bottom-12 right-12 w-16 h-16 border-b border-r border-[#c6a664]/20 hidden xl:block z-30"></div>
+  <div class="absolute top-32 left-12 w-16 h-16 border-t2 border-l-2 border-[#c6a664]/40 hidden xl:block z-30"></div>
+  <div class="absolute bottom-12 right-12 w-16 h-16 border-b-2 border-r-2 border-[#c6a664]/40 hidden xl:block z-30"></div>
 
   <div class="relative z-30 text-center max-w-6xl mx-auto space-y-10">
     <!-- Institutional Prefatory -->
     <div #prefatory class="opacity-0 mb-6">
-      <span class="font-['Cinzel'] text-[10px] sm:text-xs text-[#c6a664]/60 uppercase tracking-[1em] block mb-4">MUSEUM • EST. 2026</span>
-      <div class="w-12 h-px bg-[#c6a664]/30 mx-auto"></div>
+      <span class="font-['Cinzel'] text-[10px] sm:text-xs text-[#c6a664]/80 uppercase tracking-[1em] block mb-4 font-bold drop-shadow-sm">MUSEUM • EST. 2026</span>
+      <div class="w-12 h-px bg-[#c6a664]/50 mx-auto"></div>
     </div>
 
     <!-- Main Headline -->
     <h1
       #headline
-      class="font-['Playfair_Display'] text-5xl sm:text-7xl lg:text-9xl leading-[1.1] tracking-tight text-neutral-100 opacity-0 font-light"
+      class="font-['Playfair_Display'] text-5xl sm:text-7xl lg:text-9xl leading-[1.1] tracking-tight text-white opacity-0 font-light drop-shadow-lg"
     >
       Where Art Meets <br class="hidden md:block" />
-      <span class="italic text-[#c6a664] font-normal drop-shadow-[0_0_30px_rgba(198,166,100,0.2)]">Eternal Silence</span>
+      <span class="italic text-[#c6a664] font-normal drop-shadow-[0_0_30px_rgba(198,166,100,0.4)]">Eternal Silence</span>
     </h1>
 
     <!-- Subheadline -->
     <p
       #subheadline
-      class="font-['Inter'] text-base sm:text-lg text-neutral-500 font-light tracking-[0.2em] max-w-3xl mx-auto opacity-0 uppercase"
+      class="font-['Inter'] text-base sm:text-lg text-neutral-300 font-light tracking-[0.2em] max-w-3xl mx-auto opacity-0 uppercase drop-shadow-md"
     >
       A curated sanctuary of digital masterpieces <br class="hidden sm:block"> and historical preservation.
     </p>
@@ -54,24 +54,24 @@
     <div #cta class="opacity-0 pt-8">
       <button
         routerLink="/gallery"
-        class="group relative inline-flex items-center justify-center px-16 py-6 overflow-hidden transition-all duration-1000 ease-out border border-[#c6a664]/30 hover:border-[#c6a664] bg-transparent backdrop-blur-sm"
+        class="group relative inline-flex items-center justify-center px-16 py-6 overflow-hidden transition-all duration-1000 ease-out border border-[#c6a664]/60 hover:border-[#c6a664] bg-black/20 backdrop-blur-sm"
       >
         <!-- Button Background Fill -->
         <div class="absolute inset-x-0 bottom-0 h-0 bg-[#c6a664] transition-all duration-700 group-hover:h-full opacity-100"></div>
         
-        <span class="relative z-10 font-['Cinzel'] text-[11px] uppercase tracking-[0.6em] text-[#c6a664] group-hover:text-black transition-colors duration-700">
+        <span class="relative z-10 font-['Cinzel'] text-[11px] uppercase tracking-[0.6em] text-[#c6a664] group-hover:text-black transition-colors duration-700 font-bold">
           Enter the Gallery
         </span>
         
         <!-- Subtle Glow -->
-        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 shadow-[0_0_30px_rgba(198,166,100,0.3)]"></div>
+        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 shadow-[0_0_40px_rgba(198,166,100,0.5)]"></div>
       </button>
     </div>
   </div>
 
   <!-- Scroll Prompt -->
-  <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-4 opacity-30 animate-pulse">
+  <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-4 opacity-60 animate-pulse">
     <div class="w-px h-16 bg-gradient-to-b from-transparent to-[#c6a664]"></div>
-    <span class="text-[8px] uppercase tracking-[0.5em] text-[#c6a664]">Discovery</span>
+    <span class="text-[9px] uppercase tracking-[0.5em] text-[#c6a664] font-bold">Discovery</span>
   </div>
 </div>

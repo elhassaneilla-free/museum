@@ -11,11 +11,14 @@ import { animate, style, transition, trigger } from '@angular/animations';
     <div *ngIf="notificationService.activeNotification() as note" 
          [@fadeInOut]
          class="fixed bottom-12 right-12 z-[200] flex items-center">
-      <div class="bg-black/80 backdrop-blur-xl border border-gold/30 px-8 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col items-end">
-        <div class="text-gold/40 text-[8px] uppercase tracking-[0.4em] mb-1">Acquisition Confirmed</div>
-        <div class="text-white font-serif text-lg tracking-wider">{{ note.message }}</div>
-        <div *ngIf="note.artist" class="text-gold/60 text-[10px] uppercase tracking-[0.2em] mt-1 italic">{{ note.artist }}</div>
-        <div class="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-gold shadow-[0_0_10px_#c6a664]"></div>
+      <div class="bg-black/90 backdrop-blur-2xl border-2 border-gold/40 px-10 py-5 shadow-[0_30px_60px_rgba(0,0,0,0.8)] flex flex-col items-end relative overflow-hidden">
+        <!-- Texture Overlay -->
+        <div class="absolute inset-0 pointer-events-none opacity-[0.03] grayscale brightness-125" style="background-image: url('https://grainy-gradients.vercel.app/noise.svg');"></div>
+        
+        <div class="text-gold text-[10px] uppercase tracking-[0.5em] mb-2 font-bold drop-shadow-sm">System Update</div>
+        <div class="text-white font-serif text-xl tracking-wider drop-shadow-md italic">{{ note.message }}</div>
+        <div *ngIf="note.artist" class="text-gold text-[11px] uppercase tracking-[0.2em] mt-2 italic font-medium drop-shadow-sm">{{ note.artist }}</div>
+        <div class="absolute -left-1 top-0 bottom-0 w-1 bg-gold shadow-[0_0_15px_#c6a664]"></div>
       </div>
     </div>
   `,

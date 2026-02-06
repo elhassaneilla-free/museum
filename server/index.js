@@ -176,6 +176,16 @@ app.put('/api/orders/:id/status', authenticate, authorize(['admin']), (req, res)
   res.json({ message: 'Order status updated' });
 });
 
+app.delete('/api/orders/:id', authenticate, authorize(['admin']), (req, res) => {
+  db.prepare('DELETE FROM orders WHERE id = ?').run(req.params.id);
+  res.json({ message: 'Order deleted' });
+});
+
+app.delete('/api/orders', authenticate, authorize(['admin']), (req, res) => {
+  db.prepare('DELETE FROM orders').run();
+  res.json({ message: 'All orders deleted' });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'operational', timestamp: new Date().toISOString() });

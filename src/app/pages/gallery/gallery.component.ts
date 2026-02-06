@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DataService } from '../../services/data.service';
@@ -17,7 +17,34 @@ interface Artist {
   styles: []
 })
 export class GalleryComponent implements OnInit {
-  artists: any[] = [];
+  private dataService = inject(DataService);
+  
+  artists = computed(() => {
+    const paintings = this.dataService.paintings();
+    const artistMap = new Map();
+    
+    paintings.forEach(p => {
+      if (p.category === 'Frames') return;
+      if (!artistMap.has(p.artist)) {
+        artistMap.set(p.artist, {
+          name: p.artist,
+          image: this.staticArtistImages[p.artist] || p.image,
+          route: '/artist/' + (this.artistRoutes[p.artist] || p.artist.toLowerCase().replace(/\s+/g, '-'))
+        });
+      }
+    });
+
+    const artistList = Array.from(artistMap.values());
+    
+    // Always add Frames at the end
+    artistList.push({ 
+      name: 'Luxury Frames Collection', 
+      image: 'assets/frame0.png', 
+      route: '/frames' 
+    });
+
+    return artistList;
+  });
 
   private staticArtistImages: Record<string, string> = {
     'Leonardo da Vinci': 'assets/leo0.png',
@@ -37,31 +64,9 @@ export class GalleryComponent implements OnInit {
     'Edward Hopper': 'hopper'
   };
 
-  constructor(private dataService: DataService) {}
+  constructor() {}
 
   ngOnInit() {
-    this.dataService.getPaintings().subscribe(paintings => {
-      const artistMap = new Map();
-      
-      paintings.forEach(p => {
-        if (p.category === 'Frames') return;
-        if (!artistMap.has(p.artist)) {
-          artistMap.set(p.artist, {
-            name: p.artist,
-            image: this.staticArtistImages[p.artist] || p.image,
-            route: '/artist/' + (this.artistRoutes[p.artist] || p.artist.toLowerCase().replace(/\s+/g, '-'))
-          });
-        }
-      });
-
-      this.artists = Array.from(artistMap.values());
-      
-      // Always add Frames at the end
-      this.artists.push({ 
-        name: 'Luxury Frames Collection', 
-        image: 'assets/frame0.png', 
-        route: '/frames' 
-      });
-    });
+    this.dataService.getPaintings().subscribe();
   }
 }
